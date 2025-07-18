@@ -1,0 +1,29 @@
+# File: .github/workflows/main.yml
+
+name: Deploy Static Website to S3
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on push to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code from repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Deploy static files (HTML, CSS, JS) to S3
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --delete
+        env:
+          AWS_S3_BUCKET: abhishek4563  # <-- your bucket name
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          #SOURCE_DIR: ./               # <-- deploy root folder (HTML/CSS/JS live here)
